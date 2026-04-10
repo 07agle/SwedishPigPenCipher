@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "bradgardschiffer";
+    src: url("pagod.ttf") format("truetype");
+}
+
+body {
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    margin: 0;
+}
+
+#word{
+    font-family: bradgardschiffer;
+    font-size: 5em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+#letter {
+    font-family: bradgardschiffer;
+    font-size: 5em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+#userInput, #inputWordMode {
+    font-size: 1.5em;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    outline: none;
+    width: 200px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+#userInput:focus, #inputWordMode:focus {
+    border-color: #4CAF50;
+}
+
+#skipButton, #subMitBtnWordMode {
+    font-size: 1.2em;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #4CAF50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+#skipButton:hover, #subMitBtnWordMode:hover {
+    background-color: #4CAF50;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+#skipButton:active, #subMitBtnWordMode:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 500px) {
+    #letter {
+        font-size: 3em;
+    }
+
+    #userInput {
+        font-size: 1.2em;
+        width: 150px;
+    }
+}
+
+
+
