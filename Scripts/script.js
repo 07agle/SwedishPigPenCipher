@@ -4,6 +4,8 @@ const scoreDisplay = document.getElementById("scoreDisplay");
 const streakDisplay = document.getElementById("streakDisplay");
 const skipButton = document.getElementById("skipButton"); 
 const timer = document.getElementById("timer"); 
+const timerSwitchButton = document.getElementById("timerSwitch"); 
+
 const letterList = [
   "a",
   "b",
@@ -38,9 +40,13 @@ let score = 0;
 let longestStreak = 0;
 let startTime = 5;
 let time = startTime;
+let timerOn = true;
+let intervalId;
 reset();
 
 skipButton.onclick = reset;
+
+timerSwitchButton.onclick = timerSwitch;
 
 userInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
@@ -97,6 +103,17 @@ function countdown() {
   }
 }
 
+intervalId = setInterval(countdown, 1000);
 
-setInterval(countdown, 1000);
-
+function timerSwitch(){
+  if(timerOn){
+    clearInterval(intervalId); // stop timer
+    timerOn = false;
+    timer.textContent = "";
+  } else {
+    time = 5;
+    intervalId = setInterval(countdown, 1000);
+    timerOn = true;
+    timer.textContent = "Timer: " + time;
+  }
+}

@@ -18,6 +18,26 @@ body {
     height: 100vh;
     text-align: center;
     margin: 0;
+    height: 100vh;
+}
+
+button{
+    font-size: 1.2em;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #4CAF50;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+button:hover, button:hover {
+    background-color: #4CAF50;
+    color: #fff;
+    transform: scale(1.05);
 }
 
 #word{
@@ -25,6 +45,7 @@ body {
     font-size: 5em;
     margin-bottom: 30px;
     color: #333;
+    user-select: none;
 }
 
 #letter {
@@ -32,6 +53,7 @@ body {
     font-size: 5em;
     margin-bottom: 30px;
     color: #333;
+    user-select: none;
 }
 
 #userInput, #inputWordMode {
@@ -72,6 +94,70 @@ body {
     transform: scale(0.95);
 }
 
+header {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #4CAF50;
+    padding: 15px 20px;       
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
+    display: flex;          
+    align-items: center;     
+    text-align: center;
+}
+  
+  header a {
+    color: #ecf0f1;          
+    text-decoration: none;    
+    font-family: Arial, sans-serif;
+    font-size: 16px;        
+    font-weight: bold;        
+    transition: color 0.3s ease;
+  }
+  
+  header a:hover {
+    color: #3498db;           
+    text-decoration: underline; 
+  }
+  
+
+  #cheatSheetWordMode {
+    margin-top: 40px; /* Skapar avstånd från Submit-knappen */
+    display: flex;
+    flex-direction: column; /* Staplar innehållet nedåt */
+    align-items: center;
+    gap: 15px; /* Skapar ett snyggt mellanrum mellan knapparna och bilden */
+}
+
+/* En behållare för knapparna (valfritt, men bra om du vill ha dem bredvid varandra) */
+#showKeyButton, #revealLetterButton {
+    font-size: 0.9em;        /* Lite mindre text än huvudknappen */
+    padding: 8px 15px;       /* Mindre utfyllnad */
+    background-color: transparent; /* Gör dem ihåliga (Outline-stil) */
+    color: #FFD700;          /* Gul text istället för svart */
+    border: 1px solid #FFD700; /* Tunnare ram */
+    letter-spacing: 1px;
+}
+
+#showKeyButton:hover, #revealLetterButton:hover {
+    background-color: #FFD700;
+    color: #121212;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.2); /* Lite svagare skugga än huvudknappen */
+}
+
+/* Stilar för själva chiffer-bilden */
+#cheatSheetWordMode img {
+    max-width: 90%;          /* Ser till att den inte hamnar utanför skärmen på mobiler */
+    width: 400px;            /* En lagom maxstorlek på dator */
+    border: 2px solid #FFD700; /* Snygg gul ram runt nyckeln */
+    border-radius: 8px;      /* Rundade hörn */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1); /* Svag glow-effekt */
+    
+    /* OBS: Vi gömmer bilden som standard! */
+    display: none; 
+}
+
 @media (max-width: 500px) {
     #letter {
         font-size: 3em;
@@ -82,6 +168,3 @@ body {
         width: 150px;
     }
 }
-
-
-
