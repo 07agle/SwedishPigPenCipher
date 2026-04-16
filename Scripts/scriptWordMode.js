@@ -4,6 +4,8 @@ const inputWordMode = document.getElementById("inputWordMode");
 const keyImg = document.getElementById("keyImg");
 const showKeyButton = document.getElementById("showKeyButton");
 const revealLetterButton = document.getElementById("revealLetterButton");
+const successSound = new Audio("../Sounds/success.mp3");
+const failureSound = new Audio("../Sounds/failure.mp3");
 
 let randomWord = "";
 let keyVisible = false;
@@ -23,6 +25,7 @@ revealLetterButton.onclick = () => {
 }
 
 async function fetchWord() {
+  inputWordMode.focus();
   try {
     const response = await fetch("../words.json");
     const data = await response.json();
@@ -39,13 +42,23 @@ async function fetchWord() {
 
 
 function guessWord(){
-    let guessedWord = inputWordMode.value.toLowerCase();
+    let guessedWord = inputWordMode.value.trim().toLowerCase();
     if(guessedWord == randomWord){
+      successSound.playbackRate = 1.5;
+      successSound.play();
         fetchWord();
         inputWordMode.value = "";
     }
     else{
-        document.body.style.backgroundColor = "#ff5757";
+      failureSound.playbackRate = 2;
+      failureSound.play();
+         //Skaka
+    document.body.classList.add("shake");
+    
+    setTimeout(() => {
+      document.body.classList.remove("shake");
+    }, 200);
+
     }
 }
 

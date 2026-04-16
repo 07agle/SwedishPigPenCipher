@@ -5,6 +5,8 @@ const streakDisplay = document.getElementById("streakDisplay");
 const skipButton = document.getElementById("skipButton"); 
 const timer = document.getElementById("timer"); 
 const timerSwitchButton = document.getElementById("timerSwitch"); 
+const successSound = new Audio("../Sounds/success.mp3");
+const failureSound = new Audio("../Sounds/failure.mp3");
 
 let letterMap = new Map([
   ["a", 1], ["b", 1], ["c", 1],  ["d", 1], ["e", 1], ["f", 1],
@@ -54,7 +56,7 @@ userInput.addEventListener("keydown", function (event) {
 });
 
 function reset() {
-  clearInterval(intervalId);
+  userInput.focus();
   generateArray();
   let random = getRandomLetter();
 
@@ -69,9 +71,11 @@ function reset() {
 }
 
 function guessLetter() {
-  let guessedLetter = userInput.value.toLowerCase();
+  let guessedLetter = userInput.value.trim().toLowerCase();
 
   if (guessedLetter === letter && time > 0) {
+    successSound.playbackRate = 1.5;
+    successSound.play();
     let current = letterMap.get(letter);
     letterMap.set(letter, Math.max(1, current - 1));
     document.body.style.backgroundColor = "aliceblue";
@@ -84,11 +88,18 @@ function guessLetter() {
     }
     reset();
   } else {
+    failureSound.playbackRate = 2;
+    failureSound.play();
     score = 0;
     let current = letterMap.get(letter);
     letterMap.set(letter, Math.min(maxWeight, current + 1));
-    document.body.style.backgroundColor = "#ff5757";
-    displayLetter.style.color = "aliceblue";
+   //Skaka
+    document.body.classList.add("shake");
+    
+    setTimeout(() => {
+      document.body.classList.remove("shake");
+    }, 200);
+
     userInput.value = "";
     scoreDisplay.innerHTML = "Score: " + score;
   }
