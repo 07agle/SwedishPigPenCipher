@@ -7,6 +7,9 @@ const timer = document.getElementById("timer");
 const timerSwitchButton = document.getElementById("timerSwitch"); 
 const successSound = new Audio("../Sounds/success.mp3");
 const failureSound = new Audio("../Sounds/failure.mp3");
+const accuracyDisplay = document.getElementById("accuracyDisplay");
+
+
 
 let letterMap = new Map([
   ["a", 1], ["b", 1], ["c", 1],  ["d", 1], ["e", 1], ["f", 1],
@@ -25,6 +28,9 @@ let startTime = 5;
 let time = startTime;
 let timerOn = true;
 let intervalId;
+let accuracy = 100;
+let totalRight = 0;
+let totalLetters = 0;
 
 
 function generateArray(){
@@ -42,9 +48,9 @@ function getRandomLetter(){
   return letterArray[Math.floor(Math.random() * letterArray.length)];
 }
 
-reset();
+resetGame();
 
-skipButton.onclick = reset;
+skipButton.onclick = resetGame;
 
 timerSwitchButton.onclick = timerSwitch;
 
@@ -55,14 +61,12 @@ userInput.addEventListener("keydown", function (event) {
   }
 });
 
-function reset() {
+function resetGame(){
   userInput.focus();
   generateArray();
   let random = getRandomLetter();
-
   time = startTime;
   timer.textContent = "Timer: " + time;
-
   letter = random;
   displayLetter.innerHTML = letter;
   userInput.value = "";
@@ -70,39 +74,66 @@ function reset() {
     displayLetter.style.color = "#333";
 }
 
+function guessRight(){
+  successSound.pause();
+  failureSound.pause();
+  successSound.playbackRate = 1.5;
+  successSound.play();
+  totalRight++;
+  totalLetters++;
+  let current = letterMap.get(letter);
+  letterMap.set(letter, Math.max(1, current - 1));
+  document.body.style.backgroundColor = "aliceblue";
+  displayLetter.style.color = "#333";
+  score++;
+  scoreDisplay.innerHTML = "Score: " + score;
+  if (score > longestStreak) {
+    longestStreak = score;
+    streakDisplay.innerHTML = "Longest Streak: " + longestStreak;
+  }
+  resetGame();
+}
+
+function guessFail(){
+  failureSound.pause();
+  successSound.pause();
+  failureSound.playbackRate = 2;
+  failureSound.play();
+  totalLetters++;
+  score = 0;
+  let current = letterMap.get(letter);
+  letterMap.set(letter, Math.min(maxWeight, current + 1));
+ //Skaka
+  document.body.classList.add("shake");
+  
+  setTimeout(() => {
+    document.body.classList.remove("shake");
+  }, 200);
+
+  userInput.value = "";
+  scoreDisplay.innerHTML = "Score: " + score;
+}
+
 function guessLetter() {
   let guessedLetter = userInput.value.trim().toLowerCase();
 
+  if (!guessedLetter) return;
   if (guessedLetter === letter && time > 0) {
-    successSound.playbackRate = 1.5;
-    successSound.play();
-    let current = letterMap.get(letter);
-    letterMap.set(letter, Math.max(1, current - 1));
-    document.body.style.backgroundColor = "aliceblue";
-    displayLetter.style.color = "#333";
-    score++;
-    scoreDisplay.innerHTML = "Score: " + score;
-    if (score > longestStreak) {
-      longestStreak = score;
-      streakDisplay.innerHTML = "Longest Streak: " + longestStreak;
-    }
-    reset();
+    guessRight();
   } else {
-    failureSound.playbackRate = 2;
-    failureSound.play();
-    score = 0;
-    let current = letterMap.get(letter);
-    letterMap.set(letter, Math.min(maxWeight, current + 1));
-   //Skaka
-    document.body.classList.add("shake");
-    
-    setTimeout(() => {
-      document.body.classList.remove("shake");
-    }, 200);
-
-    userInput.value = "";
-    scoreDisplay.innerHTML = "Score: " + score;
+    guessFail();
   }
+  setAccuracy();
+  if(accuracy >= 75){
+    accuracyDisplay.style.color = "#4CAF50";
+  }
+  else if(accuracy < 75 && accuracy >= 50){
+    accuracyDisplay.style.color= "#FFD700"
+  }
+  else{
+    accuracyDisplay.style.color= "#FF2C2C"
+  }
+  accuracyDisplay.textContent = "Accuracy: "+ accuracy + "%";
 }
 
 function countdown() {
@@ -110,12 +141,18 @@ function countdown() {
   timer.textContent = "Timer: " + time;
 
   if (time <= 0) {
+    totalLetters++;
     score = 0;
     scoreDisplay.innerHTML = "Score: " + score;
     document.body.style.backgroundColor = "#ff5757";
     displayLetter.style.color = "aliceblue";
-    reset();
+    resetGame();
+    setAccuracy();
   }
+}
+
+function setAccuracy(){
+  accuracy = Math.round((totalRight/totalLetters) * 100);
 }
 
 intervalId = setInterval(countdown, 1000);
@@ -132,3 +169,4 @@ function timerSwitch(){
     timer.textContent = "Timer: " + time;
   }
 }
+

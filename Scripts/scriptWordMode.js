@@ -9,11 +9,13 @@ const failureSound = new Audio("../Sounds/failure.mp3");
 
 let randomWord = "";
 let keyVisible = false;
+let guessedWord;
 
 fetchWord();
 
 subMitBtnWordMode.onclick = () => {
   guessWord();
+  colorLetters();
 };
 
 showKeyButton.onclick = () => {
@@ -24,6 +26,14 @@ revealLetterButton.onclick = () => {
   revealLetter();
 }
 
+inputWordMode.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    console.log("Enter pressed!");
+    guessWord();
+    colorLetters();
+  }
+});
+
 async function fetchWord() {
   inputWordMode.focus();
   try {
@@ -32,6 +42,8 @@ async function fetchWord() {
     const wordList = data.words;
     let randomIndex = Math.floor(Math.random() * wordList.length);
     randomWord = wordList[randomIndex];
+    inputWordMode.maxLength = randomWord.length;
+    inputWordMode.minLength = randomWord.length;
     word.textContent = randomWord;
     console.log(randomWord);
     return randomWord;
@@ -42,7 +54,7 @@ async function fetchWord() {
 
 
 function guessWord(){
-    let guessedWord = inputWordMode.value.trim().toLowerCase();
+     guessedWord = inputWordMode.value.trim().toLowerCase();
     if(guessedWord == randomWord){
       successSound.playbackRate = 1.5;
       successSound.play();
@@ -81,3 +93,22 @@ function revealLetter(){
   letters[letterIndex] = `<span style="font-family: Arial, sans-serif;">${letters[letterIndex]}</span>`;
   word.innerHTML = letters.join("").trim(",");
 } 
+
+
+function colorLetters(){
+  guessedWord = inputWordMode.value.trim().toLowerCase();
+  let guessedLetterList = guessedWord.split("");
+  let letterWordList = randomWord.split("");
+  let result = "";
+
+  for(let i = 0; i<guessedLetterList.length; i++){
+    if(letterWordList[i] == guessedLetterList[i]){
+      result+=`<span style="color: green;">${letterWordList[i]}</span>`;
+    }
+    else{
+      result+=`<span style="color: red;">${letterWordList[i]}</span>`
+    }
+    word.innerHTML = result;
+  }
+
+}
